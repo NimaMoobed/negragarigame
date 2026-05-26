@@ -4,8 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Relative base so the app works whether served at "/" or under a subpath like "/negragarigame/"
-  base: './',
+  // GitHub Pages serves this app at https://nimamoobed.github.io/negragarigame/
+  base: '/negragarigame/',
   plugins: [
     react(),
     VitePWA({
@@ -21,8 +21,9 @@ export default defineConfig({
         description: 'اپ رنگ‌آمیزی طرح‌های اصیل نگارگری، تذهیب و گل‌و‌مرغ ایرانی — با پالت ۱۲ رنگ سنتی',
         lang:        'fa',
         dir:         'rtl',
-        start_url:   '/',
-        scope:       '/',
+        start_url:   '/negragarigame/',
+        scope:       '/negragarigame/',
+        id:          '/negragarigame/',
         display:     'standalone',
         orientation: 'any',
         background_color: '#F6EFDD',
