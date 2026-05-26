@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary:      #0F7A6E;
+    --color-primary-deep: #0A5950;
+    --color-primary-glow: #1FA193;
+    --color-accent:       #1E3A6B;
+    --color-accent-deep:  #142A52;
+    --color-accent-soft:  #C8D2E5;
+    --color-danger:       #B0392C;
+    --color-bg:           #F6EFDD;
+    --color-bg-deep:      #EFE5CB;
+    --color-surface:      #FFFCF3;
+    --color-surface-alt:  #F0E5C7;
+    --color-ink:          #2A1F12;
+    --color-ink-soft:     #5B4A2E;
+    --color-ink-mute:     #8C7651;
+    --color-border:       rgba(30, 58, 107, 0.25);
+    --color-border-deep:  rgba(30, 58, 107, 0.4);
+    --shadow-ornate:      0 8px 28px rgba(15, 122, 110, 0.18);
+    --radius-ornate:      20px;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+    direction: rtl;
+    text-align: right;
+    user-select: none;
+    -webkit-user-select: none;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* Mobile safe areas (notches) */
+  .safe-top    { padding-top:    env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+}
