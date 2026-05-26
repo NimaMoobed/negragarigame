@@ -93,10 +93,10 @@ export function ColoringScreen() {
               onClick={() => setTool(t.id)}
               style={{
                 ...iconBtn(tool === t.id ? T.primary : T.surfaceAlt),
-                width: 46, height: 46,
+                width: 40, height: 40,
               }}
             >
-              <Icon name={t.icon} size={22} color={tool === t.id ? '#fff' : T.ink} />
+              <Icon name={t.icon} size={20} color={tool === t.id ? '#fff' : T.ink} />
             </button>
           ))}
         </div>
@@ -113,6 +113,17 @@ export function ColoringScreen() {
             style={iconBtn(T.surfaceAlt)}
           >
             <Icon name="redo" size={20} color={T.ink} />
+          </button>
+          <button
+            onClick={() => {
+              if (confirm('همه‌ی رنگ‌ها از این طرح پاک شود؟')) {
+                canvasRef.current?.clear();
+              }
+            }}
+            style={iconBtn(T.surfaceAlt)}
+            title="پاک کردن همه‌ی رنگ‌ها"
+          >
+            <Icon name="trash" size={20} color={T.danger} />
           </button>
           <button onClick={onShare} style={iconBtn(T.primary)}>
             <Icon name="share" size={20} color="#fff" />
@@ -202,7 +213,7 @@ export function ColoringScreen() {
 
 function iconBtn(bg: string): React.CSSProperties {
   return {
-    width: 40, height: 40,
+    width: 36, height: 36,
     borderRadius: 10,
     background: bg,
     border: 'none',

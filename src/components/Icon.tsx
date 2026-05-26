@@ -8,6 +8,7 @@ export type IconName =
   | 'gallery' | 'settings' | 'home' | 'close'
   | 'star' | 'heart' | 'sparkles' | 'download'
   | 'qr' | 'flower' | 'leaf' | 'crown' | 'menu' | 'plus'
+  | 'trash' | 'zoom-reset'
   | 'cafe-bazaar';
 
 interface IconProps {
@@ -57,6 +58,8 @@ export function Icon({ name, size = 24, color = 'currentColor', strokeWidth = 1.
     case 'crown':     return <svg {...p}><path d="M3 18h18M3 8l4 5 5-7 5 7 4-5v10H3z"/></svg>;
     case 'menu':      return <svg {...p}><path d="M3 6h18M3 12h18M3 18h18"/></svg>;
     case 'plus':      return <svg {...p}><path d="M12 4v16M4 12h16"/></svg>;
+    case 'trash':     return <svg {...p}><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg>;
+    case 'zoom-reset': return <svg {...p}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4M8 11h6M11 8v6"/></svg>;
     case 'cafe-bazaar':
       return <svg viewBox="0 0 24 24" width={size} height={size} fill={color}><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm-1 4l8 4-8 4-8-4 8-4zm9 6.5v4.2l-8 4-8-4v-4.2l8 4 8-4z"/></svg>;
     default:          return null;
