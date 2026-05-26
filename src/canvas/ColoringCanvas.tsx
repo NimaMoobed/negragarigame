@@ -60,7 +60,13 @@ export const ColoringCanvas = forwardRef<ColoringCanvasHandle, Props>(function C
       ctx.fillStyle = '#fff';
       ctx.fillRect(0, 0, SIZE, SIZE);
 
-      const img = await loadImage(designUrl);
+      let img: HTMLImageElement;
+      try {
+        img = await loadImage(designUrl);
+      } catch (err) {
+        console.error('Failed to load design image:', designUrl, err);
+        return;
+      }
       if (cancelled) return;
 
       // Fit image into canvas keeping aspect ratio
@@ -137,6 +143,9 @@ export const ColoringCanvas = forwardRef<ColoringCanvasHandle, Props>(function C
 
   function onPointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
     if (activePidRef.current !== null) return;
+    // Refuse input until the line-art design is fully loaded — prevents the canvas
+    // from being filled solid color when the image URL failed to load.
+    if (pristineRef.current === null) return;
     activePidRef.current = e.pointerId;
     e.currentTarget.setPointerCapture(e.pointerId);
     e.preventDefault();

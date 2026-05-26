@@ -10,14 +10,18 @@ export interface Design {
   thumbUrl:   string;
 }
 
+// Vite injects BASE_URL at build time. For GitHub Pages it becomes "/negragarigame/",
+// for local dev it's "/". Using it makes the URLs work in both environments.
+const BASE = import.meta.env.BASE_URL;
+
 export const DESIGNS: Design[] = Array.from({ length: 14 }, (_, i) => {
   const n  = String(i + 1).padStart(2, '0');
   return {
     id:        `tazhib_${n}`,
     category:  'tazhib' as CategoryId,
     title:     `طرح ${i + 1}`,
-    fullUrl:   `/designs/design_${n}.png`,
-    thumbUrl:  `/designs/thumbs/thumb_${n}.png`,
+    fullUrl:   `${BASE}designs/design_${n}.png`,
+    thumbUrl:  `${BASE}designs/thumbs/thumb_${n}.png`,
   };
 });
 
