@@ -144,6 +144,11 @@ function CategoryCard({ cat, locked, onClick }: { cat: Category; locked: boolean
 
 // ─────────────────────────────────────────────────────
 
+// FooterTabs renders two things:
+//   1) A spacer (in normal flow) so screen content has room above the fixed bar
+//   2) The actual fixed bar pinned to the bottom of the viewport
+// This guarantees the tab bar is ALWAYS at the bottom of the screen, never floats
+// up when content is short.
 export function FooterTabs({ active }: { active: 'home' | 'gallery' | 'settings' }) {
   const nav = useNavigate();
   const tabs: Array<{ i: 'home' | 'gallery' | 'settings'; label: string; to: string }> = [
@@ -153,29 +158,38 @@ export function FooterTabs({ active }: { active: 'home' | 'gallery' | 'settings'
   ];
 
   return (
-    <div style={{
-      position: 'sticky', bottom: 0,
-      marginTop: 24,
-      background: T.surface,
-      borderTop: `1px solid ${T.border}`,
-      padding: '10px 24px',
-      paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
-      display: 'flex', justifyContent: 'space-around',
-    }}>
-      {tabs.map(t => (
-        <div
-          key={t.i}
-          onClick={() => active !== t.i && nav(t.to)}
-          style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-            color: active === t.i ? T.primary : T.inkMute,
-            cursor: 'pointer',
-          }}
-        >
-          <Icon name={t.i} size={22} color={active === t.i ? T.primary : T.inkMute} />
-          <div style={{ fontSize: 11, fontWeight: active === t.i ? 700 : 500 }}>{t.label}</div>
-        </div>
-      ))}
-    </div>
+    <>
+      {/* Spacer in normal flow: ~68px tab + safe-area inset */}
+      <div style={{ height: 'calc(68px + env(safe-area-inset-bottom))' }} aria-hidden />
+
+      <div style={{
+        position: 'fixed',
+        bottom: 0, left: 0, right: 0,
+        zIndex: 30,
+        background: T.surface,
+        borderTop: `1px solid ${T.border}`,
+        padding: '10px 24px',
+        paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
+        display: 'flex', justifyContent: 'space-around',
+        direction: 'rtl',
+        fontFamily: '"Vazirmatn", sans-serif',
+      }}>
+        {tabs.map(t => (
+          <div
+            key={t.i}
+            onClick={() => active !== t.i && nav(t.to)}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+              color: active === t.i ? T.primary : T.inkMute,
+              cursor: 'pointer',
+              padding: '4px 8px',
+            }}
+          >
+            <Icon name={t.i} size={22} color={active === t.i ? T.primary : T.inkMute} />
+            <div style={{ fontSize: 11, fontWeight: active === t.i ? 700 : 500 }}>{t.label}</div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

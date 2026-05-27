@@ -8,7 +8,7 @@ export type IconName =
   | 'gallery' | 'settings' | 'home' | 'close'
   | 'star' | 'heart' | 'sparkles' | 'download'
   | 'qr' | 'flower' | 'leaf' | 'crown' | 'menu' | 'plus'
-  | 'trash' | 'zoom-reset'
+  | 'trash' | 'zoom-reset' | 'palette' | 'external'
   | 'cafe-bazaar';
 
 interface IconProps {
@@ -36,10 +36,43 @@ export function Icon({ name, size = 24, color = 'currentColor', strokeWidth = 1.
     case 'back':      return <svg {...p}><path d="M15 6l-6 6 6 6"/></svg>;
     case 'next':      return <svg {...p}><path d="M9 6l6 6-6 6"/></svg>;
     case 'share':     return <svg {...p}><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 11l8-4M8 13l8 4"/></svg>;
-    case 'brush':     return <svg {...p}><path d="M14 4l6 6-9 9-4 1 1-4z"/><path d="M11 7l6 6"/></svg>;
-    case 'bucket':    return <svg {...p}><path d="M5 11l7-7 7 7-7 7-5-5"/><path d="M5 11h14"/><circle cx="20" cy="17" r="2"/></svg>;
-    case 'eraser':    return <svg {...p}><path d="M3 17l8-8 6 6-8 8H5z"/><path d="M14 6l4 4"/></svg>;
-    case 'pipette':   return <svg {...p}><path d="M14 4l6 6-9 9H5v-6z"/><path d="M11 7l6 6"/></svg>;
+    // Paint brush — handle + bushy paint blob (Lucide "brush" style)
+    case 'brush':     return <svg {...p}>
+      <path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/>
+      <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>
+    </svg>;
+    // Paint bucket / fill — distinctive diamond + drop
+    case 'bucket':    return <svg {...p}>
+      <path d="M5 11l7-7 7 7-7 7-5-5"/>
+      <path d="M5 11h14"/>
+      <circle cx="20" cy="17" r="2"/>
+    </svg>;
+    // Eraser — clearly a slanted rubber block with separator line
+    case 'eraser':    return <svg {...p}>
+      <path d="M21 21H8a2 2 0 0 1-1.42-.59l-3.99-4a2 2 0 0 1 0-2.82l10-10a2 2 0 0 1 2.83 0l6 6a2 2 0 0 1 0 2.83L12.83 21"/>
+      <path d="M5.08 11.09l8.83 8.83"/>
+    </svg>;
+    // Eyedropper / pipette — clear dropper with bulb
+    case 'pipette':   return <svg {...p}>
+      <path d="M2 22l1-1h3l9-9"/>
+      <path d="M3 21v-3l9-9"/>
+      <path d="M15 6l3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4z"/>
+    </svg>;
+    // Color wheel — rainbow circle for "custom color picker" button
+    case 'palette':   return <svg {...p}>
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="13.5" cy="6.5" r=".8" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".8" fill="currentColor"/>
+      <circle cx="17.5" cy="15.5" r=".8" fill="currentColor"/>
+      <circle cx="13.5" cy="17.5" r=".8" fill="currentColor"/>
+      <path d="M12 22a4 4 0 0 1 0-8 2 2 0 0 0 0-4 10 10 0 0 1 0 12z"/>
+    </svg>;
+    // External link / visit-site
+    case 'external':  return <svg {...p}>
+      <path d="M15 3h6v6"/>
+      <path d="M10 14L21 3"/>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+    </svg>;
     case 'undo':      return <svg {...p}><path d="M9 8l-5 4 5 4"/><path d="M4 12h10a6 6 0 0 1 0 12h-3"/></svg>;
     case 'redo':      return <svg {...p}><path d="M15 8l5 4-5 4"/><path d="M20 12H10a6 6 0 0 0 0 12h3"/></svg>;
     case 'save':      return <svg {...p}><path d="M5 5h11l3 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M7 5v5h8V5M7 21v-7h10v7"/></svg>;
