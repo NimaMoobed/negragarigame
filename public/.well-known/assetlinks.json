@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.nimamoobed.twa",
+    "sha256_cert_fingerprints": ["12:A8:E3:36:BA:B0:0E:3D:D7:CA:79:62:A2:09:C7:62:9A:9B:21:D8:B4:15:D8:E8:75:70:94:D2:3E:97:A6:07"]
+  }
+}]
