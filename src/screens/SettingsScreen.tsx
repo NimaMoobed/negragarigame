@@ -17,13 +17,13 @@ interface Item {
 const ITEMS: Item[] = [
   { icon: 'star',         label: 'امتیاز به اپ در کافه‌بازار', action: 'review' },
   { icon: 'share',        label: 'معرفی اپ به دوستان',         action: 'share'  },
-  { icon: 'external',     label: 'سایت من',                     sub: 'nimamoobed.github.io', action: 'visit-site' },
+  { icon: 'external',     label: 'سایت من',                     sub: 'khosraviyani.ir',      action: 'visit-site' },
   { icon: 'sparkles',     label: 'دربارهٔ اپ',                  action: 'about'  },
 ];
 
 const APP_PACKAGE_ID  = 'app.negargari.iranian';
 const APP_STORE_URL   = `https://cafebazaar.ir/app/${APP_PACKAGE_ID}`;
-const DEV_SITE_URL    = 'https://nimamoobed.github.io/';
+const DEV_SITE_URL    = 'http://khosraviyani.ir/';
 
 export function SettingsScreen() {
   const nav = useNavigate();
