@@ -98,9 +98,23 @@ function CategoryCard({ cat, locked, onClick }: { cat: Category; locked: boolean
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         position: 'relative',
       }}>
-        <div style={{ width: '70%', height: '70%' }}>
-          <Motif name={cat.motifKey} color={T.primary} />
-        </div>
+        {cat.iconUrl ? (
+          <img
+            src={cat.iconUrl}
+            alt={cat.title}
+            draggable={false}
+            style={{
+              width: '88%', height: '88%',
+              objectFit: 'contain',
+              filter: `drop-shadow(0 1px 0 ${T.bgDeep})`,
+              pointerEvents: 'none',
+            }}
+          />
+        ) : (
+          <div style={{ width: '70%', height: '70%' }}>
+            <Motif name={cat.motifKey} color={T.primary} />
+          </div>
+        )}
         <div style={{
           position: 'absolute', inset: 6,
           border: `1px dashed ${T.accent}`,

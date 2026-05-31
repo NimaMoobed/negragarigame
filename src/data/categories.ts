@@ -3,18 +3,32 @@
 export type CategoryId = 'tazhib' | 'negar' | 'gol';
 
 export interface Category {
-  id:        CategoryId;
-  title:     string;
-  sub:       string;
-  motifKey:  'motif4' | 'motif3' | 'motif2';   // which placeholder motif from Motif.tsx
-  count:     number;
-  locked:    boolean;
+  id:       CategoryId;
+  title:    string;
+  sub:      string;
+  /** اگر iconUrl ست شود، آن استفاده می‌شود؛ وگرنه motifKey رندر می‌شود. */
+  iconUrl?: string;
+  motifKey: 'motif4' | 'motif3' | 'motif2';
+  count:    number;
+  locked:   boolean;
 }
 
+const BASE = import.meta.env.BASE_URL;
+
 export const CATEGORIES: Category[] = [
-  { id: 'tazhib', title: 'تذهیب',    sub: 'نقوش طلایی و اسلیمی',     motifKey: 'motif4', count: 14, locked: false },
-  { id: 'negar',  title: 'نگارگری',  sub: 'سنت مکتب اصفهان و هرات',  motifKey: 'motif3', count: 36, locked: true  },
-  { id: 'gol',    title: 'گل و مرغ', sub: 'باغ نقاشی پارسی',          motifKey: 'motif2', count: 18, locked: true  },
+  {
+    id: 'tazhib', title: 'تذهیب', sub: 'نقوش طلایی و اسلیمی',
+    iconUrl:  `${BASE}categories/tazhib.png`,
+    motifKey: 'motif4', count: 14, locked: false,
+  },
+  {
+    id: 'negar', title: 'نگارگری', sub: 'سنت مکتب اصفهان و هرات',
+    motifKey: 'motif3', count: 36, locked: true,
+  },
+  {
+    id: 'gol', title: 'گل و مرغ', sub: 'باغ نقاشی پارسی',
+    motifKey: 'motif2', count: 18, locked: true,
+  },
 ];
 
 export function getCategoryById(id: string): Category | undefined {
