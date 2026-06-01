@@ -1,4 +1,5 @@
 // SettingsScreen — تنظیمات اپ + کنترل موسیقی
+// همه‌ی alert() ها با مودال‌های اختصاصی جایگزین شده‌اند تا origin سایت لو نرود.
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +8,8 @@ import { ScreenBg } from '../components/ScreenBg';
 import { AppBar } from '../components/AppBar';
 import { FooterTabs } from './HomeScreen';
 import { Icon, type IconName } from '../components/Icon';
+import { InfoSheet } from '../modals/InfoSheet';
+import { Toast } from '../components/Toast';
 import { useMusic } from '../hooks/useMusic';
 
 interface Item {
@@ -28,9 +31,12 @@ const APP_PACKAGE_ID  = 'app.negargari.iranian';
 const APP_STORE_URL   = `https://cafebazaar.ir/app/${APP_PACKAGE_ID}`;
 const DEV_SITE_URL    = 'http://khosraviyani.ir/';
 
+type Sheet = 'about' | 'music' | null;
+
 export function SettingsScreen() {
   const nav = useNavigate();
-  const [musicSheetOpen, setMusicSheetOpen] = useState(false);
+  const [sheet, setSheet] = useState<Sheet>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   const handle = (action: Item['action']) => {
     switch (action) {
@@ -47,17 +53,17 @@ export function SettingsScreen() {
           }).catch(() => {});
         } else {
           navigator.clipboard?.writeText(APP_STORE_URL).catch(() => {});
-          alert('لینک اپ کپی شد:\n' + APP_STORE_URL);
+          setToast('لینک اپ کپی شد');
         }
         break;
       case 'visit-site':
         window.open(DEV_SITE_URL, '_blank', 'noopener,noreferrer');
         break;
       case 'about':
-        alert('رنگ‌آمیزی هنر نگارگری ایرانی\n\nنسخهٔ ۱.۰\nساخته شده با عشق برای هنر ایرانی 🌿');
+        setSheet('about');
         break;
       case 'music':
-        setMusicSheetOpen(true);
+        setSheet('music');
         break;
     }
   };
@@ -101,7 +107,26 @@ export function SettingsScreen() {
 
       <FooterTabs active="settings" />
 
-      {musicSheetOpen && <MusicSheet onClose={() => setMusicSheetOpen(false)} />}
+      {sheet === 'about' && (
+        <InfoSheet
+          icon="sparkles"
+          title="رنگ‌آمیزی هنر نگارگری ایرانی"
+          body={
+            <>
+              نسخهٔ ۱.۰
+              <br/><br/>
+              مجموعه‌ای از طرح‌های اصیل ایرانی برای رنگ‌آمیزی — تذهیب، نگارگری و گل‌و‌مرغ.
+              <br/><br/>
+              ساخته شده با عشق برای هنر ایرانی 🌿
+            </>
+          }
+          onClose={() => setSheet(null)}
+        />
+      )}
+
+      {sheet === 'music' && <MusicSheet onClose={() => setSheet(null)} />}
+
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </ScreenBg>
   );
 }
@@ -153,24 +178,9 @@ function MusicSheet({ onClose }: { onClose: () => void }) {
             textAlign: 'right',
           }}>
             هنوز موسیقی به اپ اضافه نشده.
-            <br/><br/>
-            <b style={{ color: T.danger }}>⚠ هشدار کپی‌رایت:</b> آهنگ‌های هنرمندان مشهور (افتخاری، اصفهانی، ...) بدون لایسنس قانونی نباید استفاده شود — کافه‌بازار اپ را رد می‌کند.
-            <br/><br/>
-            <b>منابع قانونی:</b>
-            <br/>• Pixabay Music (رایگان، رویالتی-فری)
-            <br/>• YouTube Audio Library
-            <br/>• Free Music Archive
-            <br/>• خرید لایسنس از هنرمند مستقیماً
-            <br/>• تولید با AI (Suno/Udio) با مجوز تجاری
-            <br/><br/>
-            <b>راه اضافه‌کردن:</b>
-            <br/>۱) فایل MP3 را در پوشه‌ی <code>public/music/</code> پروژه بگذار
-            <br/>۲) آن را به آرایه‌ی TRACKS در <code>src/data/music.ts</code> اضافه کن
-            <br/>۳) build + deploy
           </div>
         ) : (
           <>
-            {/* Current track + controls */}
             <div style={{
               background: T.bgDeep,
               border: `1px solid ${T.border}`,

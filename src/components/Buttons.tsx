@@ -8,12 +8,14 @@ interface BtnProps {
   onClick?:    () => void;
   fullWidth?:  boolean;
   icon?:       ReactNode;
-  variant?:    'primary' | 'accent';
+  variant?:    'primary' | 'accent' | 'danger';
   disabled?:   boolean;
 }
 
 export function PrimaryButton({ children, onClick, fullWidth, icon, variant = 'primary', disabled }: BtnProps) {
-  const bg = variant === 'primary' ? T.primary : T.accent;
+  const bg = variant === 'primary' ? T.primary
+           : variant === 'danger'  ? T.danger
+           : T.accent;
   return (
     <button
       onClick={onClick}

@@ -15,6 +15,8 @@ import { getDesignById } from '../data/designs';
 import { ColoringCanvas, type ColoringCanvasHandle, type Tool } from '../canvas/ColoringCanvas';
 import { getValue, setValue } from '../lib/storage';
 import { useMusic } from '../hooks/useMusic';
+import { InfoSheet } from '../modals/InfoSheet';
+import { Toast } from '../components/Toast';
 
 const TOOLS: Array<{ id: Tool; icon: IconName; label: string }> = [
   { id: 'fill',    icon: 'bucket',  label: 'سطل رنگ'    },
@@ -33,6 +35,8 @@ export function ColoringScreen() {
   const [tool, setTool] = useState<Tool>('fill');
   const [color, setColor] = useState<string>(PERSIAN_PALETTE[0].hex);
   const [brushSize, setBrushSize] = useState<number>(14);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const saveTimer = useRef<number | null>(null);
 
   const storageKey = design ? `design-${design.id}` : null;
@@ -95,9 +99,7 @@ export function ColoringScreen() {
             <Icon name="redo" size={20} color={T.ink} />
           </button>
           <button
-            onClick={() => {
-              if (confirm('همه‌ی رنگ‌ها از این طرح پاک شود؟')) canvasRef.current?.clear();
-            }}
+            onClick={() => setConfirmClear(true)}
             style={iconBtn(T.surfaceAlt)}
             aria-label="پاک کردن"
           >
@@ -106,7 +108,7 @@ export function ColoringScreen() {
           <button
             onClick={() => {
               if (!m.hasTracks) {
-                alert('هنوز موسیقی به اپ اضافه نشده است.\nاز تنظیمات راهنمای اضافه‌کردن را ببین.');
+                setToast('هنوز موسیقی به این طرح اضافه نشده');
                 return;
               }
               m.toggle();
@@ -277,6 +279,21 @@ export function ColoringScreen() {
           })}
         </div>
       </div>
+
+      {confirmClear && (
+        <InfoSheet
+          icon="trash"
+          title="پاک‌کردن رنگ‌ها"
+          body="همه‌ی رنگ‌ها از این طرح پاک شود؟"
+          confirmText="بله، پاک کن"
+          cancelText="منصرف شدم"
+          danger
+          onConfirm={() => canvasRef.current?.clear()}
+          onClose={() => setConfirmClear(false)}
+        />
+      )}
+
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </ScreenBg>
   );
 }
