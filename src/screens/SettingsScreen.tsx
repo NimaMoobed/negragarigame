@@ -1,20 +1,23 @@
-// SettingsScreen — تنظیمات اپ
+// SettingsScreen — تنظیمات اپ + کنترل موسیقی
 
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { T } from '../theme/classic';
 import { ScreenBg } from '../components/ScreenBg';
 import { AppBar } from '../components/AppBar';
 import { FooterTabs } from './HomeScreen';
 import { Icon, type IconName } from '../components/Icon';
+import { useMusic } from '../hooks/useMusic';
 
 interface Item {
   icon:   IconName;
   label:  string;
   sub?:   string;
-  action: 'about' | 'review' | 'share' | 'visit-site';
+  action: 'about' | 'review' | 'share' | 'visit-site' | 'music';
 }
 
 const ITEMS: Item[] = [
+  { icon: 'music',        label: 'موسیقی پس‌زمینه',              action: 'music' },
   { icon: 'star',         label: 'امتیاز به اپ در کافه‌بازار', action: 'review' },
   { icon: 'share',        label: 'معرفی اپ به دوستان',         action: 'share'  },
   { icon: 'external',     label: 'سایت من',                     sub: 'khosraviyani.ir',      action: 'visit-site' },
@@ -27,6 +30,7 @@ const DEV_SITE_URL    = 'http://khosraviyani.ir/';
 
 export function SettingsScreen() {
   const nav = useNavigate();
+  const [musicSheetOpen, setMusicSheetOpen] = useState(false);
 
   const handle = (action: Item['action']) => {
     switch (action) {
@@ -42,7 +46,6 @@ export function SettingsScreen() {
             url:   APP_STORE_URL,
           }).catch(() => {});
         } else {
-          // fallback: copy link
           navigator.clipboard?.writeText(APP_STORE_URL).catch(() => {});
           alert('لینک اپ کپی شد:\n' + APP_STORE_URL);
         }
@@ -52,6 +55,9 @@ export function SettingsScreen() {
         break;
       case 'about':
         alert('رنگ‌آمیزی هنر نگارگری ایرانی\n\nنسخهٔ ۱.۰\nساخته شده با عشق برای هنر ایرانی 🌿');
+        break;
+      case 'music':
+        setMusicSheetOpen(true);
         break;
     }
   };
@@ -94,6 +100,142 @@ export function SettingsScreen() {
       </div>
 
       <FooterTabs active="settings" />
+
+      {musicSheetOpen && <MusicSheet onClose={() => setMusicSheetOpen(false)} />}
     </ScreenBg>
   );
+}
+
+// ─── Music control bottom sheet ───────────────────────────────
+
+function MusicSheet({ onClose }: { onClose: () => void }) {
+  const m = useMusic();
+
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 50,
+        background: 'rgba(20, 15, 5, 0.55)',
+        backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+        direction: 'rtl', fontFamily: '"Vazirmatn", sans-serif',
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: '100%', maxWidth: 520,
+          background: T.surface,
+          borderTopLeftRadius: 28, borderTopRightRadius: 28,
+          padding: '10px 24px 28px',
+          paddingBottom: 'calc(28px + env(safe-area-inset-bottom))',
+          boxShadow: '0 -16px 50px rgba(0,0,0,0.25)',
+          border: `1.5px solid ${T.accent}`,
+        }}
+      >
+        <div style={{ width: 48, height: 5, borderRadius: 3, background: T.border, margin: '0 auto 18px' }}/>
+
+        <div style={{ textAlign: 'center', marginBottom: 18 }}>
+          <Icon name="music" size={40} color={T.primary} />
+          <div style={{ fontSize: 18, fontWeight: 800, color: T.ink, marginTop: 8 }}>موسیقی پس‌زمینه</div>
+        </div>
+
+        {!m.hasTracks ? (
+          <div style={{
+            background: T.bgDeep,
+            border: `1px dashed ${T.accent}`,
+            borderRadius: 14,
+            padding: 18,
+            fontSize: 13,
+            lineHeight: 1.85,
+            color: T.inkSoft,
+            textAlign: 'right',
+          }}>
+            هنوز موسیقی به اپ اضافه نشده.
+            <br/><br/>
+            <b style={{ color: T.danger }}>⚠ هشدار کپی‌رایت:</b> آهنگ‌های هنرمندان مشهور (افتخاری، اصفهانی، ...) بدون لایسنس قانونی نباید استفاده شود — کافه‌بازار اپ را رد می‌کند.
+            <br/><br/>
+            <b>منابع قانونی:</b>
+            <br/>• Pixabay Music (رایگان، رویالتی-فری)
+            <br/>• YouTube Audio Library
+            <br/>• Free Music Archive
+            <br/>• خرید لایسنس از هنرمند مستقیماً
+            <br/>• تولید با AI (Suno/Udio) با مجوز تجاری
+            <br/><br/>
+            <b>راه اضافه‌کردن:</b>
+            <br/>۱) فایل MP3 را در پوشه‌ی <code>public/music/</code> پروژه بگذار
+            <br/>۲) آن را به آرایه‌ی TRACKS در <code>src/data/music.ts</code> اضافه کن
+            <br/>۳) build + deploy
+          </div>
+        ) : (
+          <>
+            {/* Current track + controls */}
+            <div style={{
+              background: T.bgDeep,
+              border: `1px solid ${T.border}`,
+              borderRadius: 14,
+              padding: 16,
+              marginBottom: 16,
+              textAlign: 'center',
+            }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: T.ink }}>{m.track?.title ?? '—'}</div>
+              {m.track?.artist && (
+                <div style={{ fontSize: 13, color: T.inkSoft, marginTop: 4 }}>{m.track.artist}</div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 14 }}>
+              <button onClick={m.prev} style={controlBtn()}>
+                <Icon name="next" size={22} color={T.ink} />
+              </button>
+              <button onClick={m.toggle} style={controlBtn(T.primary)}>
+                <Icon name={m.playing ? 'music-off' : 'music'} size={26} color="#fff" />
+              </button>
+              <button onClick={m.next} style={controlBtn()}>
+                <Icon name="back" size={22} color={T.ink} />
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 11, color: T.inkMute, minWidth: 36 }}>بلندی</span>
+              <input
+                type="range"
+                min={0} max={100} defaultValue={50}
+                onChange={e => m.setVolume(parseInt(e.target.value, 10) / 100)}
+                style={{ flex: 1, accentColor: T.primary }}
+              />
+            </div>
+          </>
+        )}
+
+        <button
+          onClick={onClose}
+          style={{
+            width: '100%', marginTop: 18,
+            padding: '11px 18px',
+            background: 'transparent',
+            color: T.inkMute,
+            border: `1px solid ${T.border}`,
+            borderRadius: 12,
+            fontSize: 14, fontWeight: 600,
+            fontFamily: 'Vazirmatn, sans-serif',
+            cursor: 'pointer',
+          }}
+        >بستن</button>
+      </div>
+    </div>
+  );
+}
+
+function controlBtn(bg: string = T.surfaceAlt): React.CSSProperties {
+  return {
+    width: 56, height: 56,
+    borderRadius: '50%',
+    background: bg,
+    border: 'none',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer',
+    boxShadow: bg === T.primary ? `0 4px 14px ${T.primary}44` : 'none',
+  };
 }

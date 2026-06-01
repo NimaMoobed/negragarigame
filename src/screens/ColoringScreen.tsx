@@ -14,6 +14,7 @@ import { PERSIAN_PALETTE } from '../theme/palette';
 import { getDesignById } from '../data/designs';
 import { ColoringCanvas, type ColoringCanvasHandle, type Tool } from '../canvas/ColoringCanvas';
 import { getValue, setValue } from '../lib/storage';
+import { useMusic } from '../hooks/useMusic';
 
 const TOOLS: Array<{ id: Tool; icon: IconName; label: string }> = [
   { id: 'fill',    icon: 'bucket',  label: 'سطل رنگ'    },
@@ -28,6 +29,7 @@ export function ColoringScreen() {
   const design = designId ? getDesignById(designId) : undefined;
 
   const canvasRef = useRef<ColoringCanvasHandle>(null);
+  const m = useMusic();
   const [tool, setTool] = useState<Tool>('fill');
   const [color, setColor] = useState<string>(PERSIAN_PALETTE[0].hex);
   const [brushSize, setBrushSize] = useState<number>(14);
@@ -100,6 +102,20 @@ export function ColoringScreen() {
             aria-label="پاک کردن"
           >
             <Icon name="trash" size={20} color={T.danger} />
+          </button>
+          <button
+            onClick={() => {
+              if (!m.hasTracks) {
+                alert('هنوز موسیقی به اپ اضافه نشده است.\nاز تنظیمات راهنمای اضافه‌کردن را ببین.');
+                return;
+              }
+              m.toggle();
+            }}
+            style={iconBtn(m.playing ? T.primary : T.surfaceAlt)}
+            aria-label="موسیقی"
+            title={m.hasTracks ? (m.playing ? 'توقف' : 'پخش موسیقی') : 'موسیقی اضافه نشده'}
+          >
+            <Icon name={m.playing ? 'music' : 'music-off'} size={20} color={m.playing ? '#fff' : T.ink} />
           </button>
           <button onClick={() => nav(`/share/${designId}`)} style={iconBtn(T.primary)} aria-label="اشتراک">
             <Icon name="share" size={20} color="#fff" />
