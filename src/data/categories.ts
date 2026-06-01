@@ -25,6 +25,8 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'negar', title: 'نگارگری', sub: 'سنت مکتب اصفهان و هرات',
+    iconUrl:  `${BASE}categories/negar.jpg`,
+    iconFit:  'cover',
     motifKey: 'motif3', count: 36, locked: true,
   },
   {
