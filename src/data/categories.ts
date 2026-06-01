@@ -8,6 +8,8 @@ export interface Category {
   sub:      string;
   /** اگر iconUrl ست شود، آن استفاده می‌شود؛ وگرنه motifKey رندر می‌شود. */
   iconUrl?: string;
+  /** نحوه‌ی fit کردن تصویر داخل کارت. پیش‌فرض contain (مناسب PNG شفاف). */
+  iconFit?: 'contain' | 'cover';
   motifKey: 'motif4' | 'motif3' | 'motif2';
   count:    number;
   locked:   boolean;
@@ -27,6 +29,8 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'gol', title: 'گل و مرغ', sub: 'باغ نقاشی پارسی',
+    iconUrl:  `${BASE}categories/gol.jpg`,
+    iconFit:  'cover',
     motifKey: 'motif2', count: 18, locked: true,
   },
 ];
