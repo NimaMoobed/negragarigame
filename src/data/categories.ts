@@ -28,13 +28,13 @@ export const CATEGORIES: Category[] = [
     id: 'negar', title: 'نگارگری', sub: 'سنت مکتب اصفهان و هرات',
     iconUrl:  `${BASE}categories/negar.jpg`,
     iconFit:  'cover',
-    motifKey: 'motif3', count: 36, locked: true,
+    motifKey: 'motif3', count: 13, locked: true,
   },
   {
     id: 'gol', title: 'گل و مرغ', sub: 'باغ نقاشی پارسی',
     iconUrl:  `${BASE}categories/gol.jpg`,
     iconFit:  'cover',
-    motifKey: 'motif2', count: 18, locked: true,
+    motifKey: 'motif2', count: 14, locked: true,
   },
 ];
 
