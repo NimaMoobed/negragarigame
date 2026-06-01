@@ -25,7 +25,7 @@ export default defineConfig({
         scope:       '/negragarigame/',
         id:          '/negragarigame/',
         display:     'standalone',
-        orientation: 'any',
+        orientation: 'portrait',
         background_color: '#F6EFDD',
         theme_color:      '#0F7A6E',
         categories:  ['entertainment', 'lifestyle', 'games'],

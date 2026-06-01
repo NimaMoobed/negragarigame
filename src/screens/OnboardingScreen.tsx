@@ -1,4 +1,5 @@
 // Onboarding — ۳ اسلاید معرفی. فقط در اولین اجرا نمایش داده می‌شود.
+// تصاویر hero هر اسلاید همان آیکن‌های ۳ دسته‌ی صفحه‌ی خانه هستند.
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { T } from '../theme/classic';
 import { ScreenBg } from '../components/ScreenBg';
 import { PrimaryButton } from '../components/Buttons';
 import { Icon } from '../components/Icon';
-import { Motif } from '../components/Motif';
+import { CornerBracket } from '../components/Ornaments';
 import { ONBOARDING } from '../data/onboarding';
 import { setValue } from '../lib/storage';
 
@@ -40,24 +41,36 @@ export function OnboardingScreen() {
           >رد کردن</button>
         </div>
 
-        {/* Hero */}
+        {/* Hero — rounded card with the slide's image */}
         <div style={{
           flex: 1,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center', gap: 32,
         }}>
           <div style={{
-            width: 220, height: 220, borderRadius: 110,
-            background: T.surfaceAlt,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 240, height: 280,
+            borderRadius: T.radius,
+            background: T.surface,
+            border: `1.5px solid ${T.accent}`,
+            boxShadow: T.shadow,
+            overflow: 'hidden',
             position: 'relative',
           }}>
-            <div style={{ width: 150, height: 150 }}>
-              <Motif name={s.motifKey} color={T.primary} />
-            </div>
-            <svg viewBox="0 0 220 220" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} fill="none" stroke={T.accent} strokeWidth="1">
-              <circle cx="110" cy="110" r="108" strokeDasharray="2 4" />
-            </svg>
+            <img
+              src={s.imageUrl}
+              alt={s.title}
+              draggable={false}
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                pointerEvents: 'none',
+              }}
+            />
+            {/* Ornate corner brackets — same flourish as OrnateCard */}
+            <div style={{ position: 'absolute', top: 6, left:  6 }}><CornerBracket color={T.accent} size={22} flip /></div>
+            <div style={{ position: 'absolute', top: 6, right: 6 }}><CornerBracket color={T.accent} size={22}        /></div>
+            <div style={{ position: 'absolute', bottom: 6, left:  6, transform: 'rotate(-90deg)' }}><CornerBracket color={T.accent} size={22} flip /></div>
+            <div style={{ position: 'absolute', bottom: 6, right: 6, transform: 'rotate(90deg)'  }}><CornerBracket color={T.accent} size={22}        /></div>
           </div>
 
           <div style={{ textAlign: 'center', maxWidth: 320 }}>

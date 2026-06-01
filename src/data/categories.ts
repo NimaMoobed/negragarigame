@@ -20,7 +20,8 @@ const BASE = import.meta.env.BASE_URL;
 export const CATEGORIES: Category[] = [
   {
     id: 'tazhib', title: 'تذهیب', sub: 'نقوش طلایی و اسلیمی',
-    iconUrl:  `${BASE}categories/tazhib.png`,
+    iconUrl:  `${BASE}categories/tazhib.jpg`,
+    iconFit:  'cover',
     motifKey: 'motif4', count: 14, locked: false,
   },
   {
