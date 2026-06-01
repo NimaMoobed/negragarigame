@@ -21,10 +21,7 @@ export interface Track {
 }
 
 export const TRACKS: Track[] = [
-  // مثال — وقتی فایل اضافه کردی این را uncomment کن و ادیت کن:
-  // { id: 't1', title: 'تک‌نوازی سنتور',     artist: 'نوازنده',     url: `${BASE}music/santour.mp3` },
-  // { id: 't2', title: 'مهربان جان',          artist: 'علیرضا افتخاری', url: `${BASE}music/mehraban-jan.mp3` },
-  // { id: 't3', title: 'وطنم',                artist: 'محمد اصفهانی',   url: `${BASE}music/vatanam.mp3` },
+  { id: 'setar-garden', title: 'باغ سه‌تار', artist: 'بی‌کلام', url: `${BASE}music/setar-garden.mp3` },
 ];
 
 // Re-export BASE for places that need it (e.g. preloading)
