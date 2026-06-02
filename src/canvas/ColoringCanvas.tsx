@@ -99,7 +99,8 @@ export const ColoringCanvas = forwardRef<ColoringCanvasHandle, Props>(function C
       const h = img.height * s;
       ctx.drawImage(img, (SIZE - w) / 2, (SIZE - h) / 2, w, h);
 
-      thresholdLineArt(ctx);
+      // NOTE: no hard threshold at load — preserves the original artistic tonality.
+      // floodFill uses wall-detection + color tolerance to fill cleanly.
 
       pristineRef.current  = ctx.getImageData(0, 0, SIZE, SIZE);
       undoStackRef.current = [];
@@ -380,16 +381,6 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-function thresholdLineArt(ctx: CanvasRenderingContext2D) {
-  const img = ctx.getImageData(0, 0, SIZE, SIZE);
-  const d = img.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const gray = (d[i] + d[i + 1] + d[i + 2]) / 3;
-    const v = gray < 128 ? 0 : 255;
-    d[i] = v;
-    d[i + 1] = v;
-    d[i + 2] = v;
-    d[i + 3] = 255;
-  }
-  ctx.putImageData(img, 0, 0);
-}
+// thresholdLineArt was removed — we now preserve the original tonality of the
+// designs. The flood-fill algorithm in floodFill.ts handles soft/gray boundaries
+// via the WALL_THRESHOLD + color-tolerance predicate.
