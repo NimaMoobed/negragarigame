@@ -36,9 +36,42 @@ async function init() {
   audio.volume = pref?.volume ?? 0.5;
 
   audio.addEventListener('ended',   () => next());
-  audio.addEventListener('play',    notify);
+  audio.addEventListener('play',    () => { notify(); updateMediaSession(); });
   audio.addEventListener('pause',   notify);
   audio.addEventListener('error',   notify);
+
+  // Pause music when the user leaves the app (notifications, switching apps, etc.).
+  // This also stops the system media notification from staying visible.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && audio && !audio.paused) {
+      audio.pause();
+    }
+  });
+  window.addEventListener('pagehide', () => {
+    if (audio && !audio.paused) audio.pause();
+  });
+}
+
+/** Set MediaSession metadata so the system media notification shows OUR title/artist (not the URL). */
+function updateMediaSession() {
+  if (!('mediaSession' in navigator) || TRACKS.length === 0) return;
+  const t = TRACKS[index];
+  const base = location.origin + (import.meta.env.BASE_URL || '/');
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:  t.title,
+      artist: t.artist,
+      album:  'رنگ‌آمیزی هنر نگارگری ایرانی',
+      artwork: [
+        { src: base + 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: base + 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      ],
+    });
+    navigator.mediaSession.setActionHandler('play',          () => { audio?.play().catch(() => {}); });
+    navigator.mediaSession.setActionHandler('pause',         () => { audio?.pause(); });
+    navigator.mediaSession.setActionHandler('previoustrack', () => { prev(); });
+    navigator.mediaSession.setActionHandler('nexttrack',     () => { next(); });
+  } catch { /* not supported */ }
 }
 
 function getState(): MusicState {

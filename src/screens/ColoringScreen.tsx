@@ -16,6 +16,7 @@ import { ColoringCanvas, type ColoringCanvasHandle, type Tool } from '../canvas/
 import { getValue, setValue } from '../lib/storage';
 import { useMusic } from '../hooks/useMusic';
 import { InfoSheet } from '../modals/InfoSheet';
+import { ColorPickerModal } from '../modals/ColorPickerModal';
 import { Toast } from '../components/Toast';
 
 const TOOLS: Array<{ id: Tool; icon: IconName; label: string }> = [
@@ -36,6 +37,7 @@ export function ColoringScreen() {
   const [color, setColor] = useState<string>(PERSIAN_PALETTE[0].hex);
   const [brushSize, setBrushSize] = useState<number>(14);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const saveTimer = useRef<number | null>(null);
 
@@ -208,24 +210,16 @@ export function ColoringScreen() {
         borderTop: `1px solid ${T.border}`,
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
-        {/* Color wheel — custom color picker */}
-        <label
-          style={{ position: 'relative', width: 42, height: 42, flexShrink: 0, cursor: 'pointer' }}
+        {/* Color wheel — opens custom Persian color picker (NOT the system <input type=color>) */}
+        <button
+          onClick={() => setColorPickerOpen(true)}
+          style={{
+            position: 'relative', width: 42, height: 42, flexShrink: 0,
+            cursor: 'pointer', padding: 0, border: 'none', background: 'transparent',
+          }}
           title="انتخاب رنگ آزاد"
+          aria-label="انتخاب رنگ آزاد"
         >
-          <input
-            type="color"
-            value={color}
-            onChange={e => {
-              setColor(e.target.value.toUpperCase());
-              if (tool === 'eraser') setTool('fill');
-            }}
-            style={{
-              position: 'absolute', inset: 0,
-              opacity: 0, cursor: 'pointer',
-              width: '100%', height: '100%',
-            }}
-          />
           <div style={{
             width: '100%', height: '100%', borderRadius: '50%',
             background: `conic-gradient(
@@ -237,7 +231,6 @@ export function ColoringScreen() {
             transform: isCustomColor ? 'scale(1.08)' : 'scale(1)',
             transition: 'transform .12s',
           }}/>
-          {/* Show inner dot in current custom color */}
           {isCustomColor && (
             <div style={{
               position: 'absolute', top: '50%', left: '50%',
@@ -248,7 +241,7 @@ export function ColoringScreen() {
               pointerEvents: 'none',
             }}/>
           )}
-        </label>
+        </button>
 
         {/* Persian palette */}
         <div className="no-scrollbar" style={{
@@ -294,6 +287,17 @@ export function ColoringScreen() {
       )}
 
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+
+      {colorPickerOpen && (
+        <ColorPickerModal
+          initialColor={color}
+          onClose={() => setColorPickerOpen(false)}
+          onSelect={hex => {
+            setColor(hex);
+            if (tool === 'eraser') setTool('fill');
+          }}
+        />
+      )}
     </ScreenBg>
   );
 }
