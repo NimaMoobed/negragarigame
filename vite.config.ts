@@ -4,8 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages serves this app at https://nimamoobed.github.io/negragarigame/
-  base: '/negragarigame/',
+  // Custom domain: https://app.khosraviyani.ir/ (configured via public/CNAME)
+  base: '/',
   plugins: [
     react(),
     VitePWA({
@@ -21,9 +21,9 @@ export default defineConfig({
         description: 'اپ رنگ‌آمیزی طرح‌های اصیل نگارگری، تذهیب و گل‌و‌مرغ ایرانی — با پالت ۱۲ رنگ سنتی',
         lang:        'fa',
         dir:         'rtl',
-        start_url:   '/negragarigame/',
-        scope:       '/negragarigame/',
-        id:          '/negragarigame/',
+        start_url:   '/',
+        scope:       '/',
+        id:          '/',
         display:     'standalone',
         orientation: 'portrait',
         background_color: '#F6EFDD',
